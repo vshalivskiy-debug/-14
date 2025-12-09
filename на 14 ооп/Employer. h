@@ -1,0 +1,58 @@
+#pragma once
+#include <iostream>
+#include <stdexcept>
+#include "Worker.h"
+
+class Employer {
+private:
+    Worker* workers;
+    size_t size;
+    size_t current;
+
+public:
+    Employer(size_t s = 5) : size(s), current(0) {
+        workers = new Worker[size];
+    }
+
+    ~Employer() {
+        delete[] workers;
+    }
+
+    void hire(const Worker& w) {
+        if (current >= size)
+            throw std::runtime_error("Немає вільних посад!");
+
+        workers[current] = w;
+        std::cout << "Працівника найнято на позицію "
+                  << current << std::endl;
+        current++;
+    }
+
+    void fire(const size_t i) {
+        if (i >= current)
+            throw std::out_of_range("Помилка: позиція не існує!");
+
+        for (size_t j = i; j < current - 1; j++)
+            workers[j] = workers[j + 1];
+
+        current--;
+        std::cout << "Працівника звільнено з позиції "
+                  << i << std::endl;
+    }
+
+    void show() const {
+        std::cout << "--- Список працівників ---\n";
+        if (current == 0) {
+            std::cout << "Поки що працівників немає.\n";
+            return;
+        }
+
+        for (size_t i = 0; i < current; i++) {
+            std::cout << i << ". "
+                      << workers[i].getName()
+                      << " (вік: "
+                      << workers[i].getAge()
+                      << ")\n";
+        }
+    }
+};

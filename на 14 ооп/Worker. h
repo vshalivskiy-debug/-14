@@ -1,0 +1,17 @@
+#pragma once
+#include <string>
+
+class Worker {
+private:
+    std::string name;
+    int age;
+
+public:
+    Worker() : name(""), age(0) {}
+
+    Worker(std::string n, int a)
+        : name(std::move(n)), age(a) {}
+
+    std::string getName() const { return name; }
+    int getAge() const { return age; }
+};
